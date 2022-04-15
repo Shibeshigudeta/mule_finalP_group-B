@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="f1ae226a-9e60-4da9-9161-cf428a3852e5" >
+		<http:listener-connection host="0.0.0.0" port="8088" />
+	</http:listener-config>
+	<flow name="firewquestionq1Flow" doc:id="42b6b414-52a9-4069-9c4d-8b9f632083d2" >
+		<http:listener doc:name="Listener" doc:id="95b6eaac-846c-4bd2-a4e4-545c4ab2bfde" config-ref="HTTP_Listener_config" path="/fNameL"/>
+		<set-variable value="#[attributes.queryParams.firstName]" doc:name="Accept_and_hold _firstName" doc:id="71e13cf7-00b1-4c6e-8639-2a8206b752b6" variableName="v1"/>
+		<set-variable value="#[sizeOf(attributes.queryParams.firstName) as Number]" doc:name="count_the_size_of_firstName" doc:id="e0368127-17c9-4868-b26b-7486b9007d04" variableName="v2"/>
+		<ee:transform doc:name="Transform Message" doc:id="f559500e-27f3-4cc8-98a1-893854eb6cfa" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"your first name length is": sizeOf(attributes.queryParams.firstName) as Number
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="firewquestionq1Flow1" doc:id="e45d1702-029e-4796-90c8-d664674d3623" >
+		<http:listener doc:name="Listener" doc:id="40fe0b15-f4ff-483c-94ff-06427603052b" config-ref="HTTP_Listener_config" path="/lNameL"/>
+		<set-variable value="#[attributes.queryParams.lastName]" doc:name="accept_and_hold_lastName" doc:id="d06107f4-0ee7-40ac-b728-67dac51b50bc" variableName="v3"/>
+		<set-variable value="#[sizeOf(attributes.queryParams.lastName) as Number]" doc:name="count_the_sizeof_lastName" doc:id="0dc117e3-b01d-4851-ac0e-d892e758281e" variableName="v4"/>
+		<ee:transform doc:name="Transform Message" doc:id="7b97ff80-f8c5-4f90-a6b7-3eb73a7a7a34" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"your last name length is": sizeOf(attributes.queryParams.lastName) as Number
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
